@@ -1,0 +1,91 @@
+# system configuration
+system:
+  name: "FairManServer"
+  port: 8080
+  version: "v0.0.1"
+  db-type: 'mysql'
+  use-multipoint: true
+  oss-type: 'local'    # 控制oss选择走本期还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+# mysql configuration
+mysql:
+  path: '127.0.0.1'
+  port: '3306'
+  config: ''
+  db-name: 'adp'
+  username: root
+  password: 'root'
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mod: true
+  log-zap: true
+# zap logger configuration
+zap:
+  level: 'info'
+  format: 'console'
+  prefix: '[github.com/lliuhuan/arco-design-pro-gin]'
+  director: 'log'
+  show-line: true
+  encode-level: 'LowercaseColorLevelEncoder'
+  stacktrace-key: 'stacktrace'
+  log-in-console: true
+# casbin configuration
+casbin:
+  model-path: './resource/rbac_model.conf'
+# jwt configuration
+jwt:
+  signing-key: 'arco-design-pro'
+  expires-time: 604800
+  buffer-time: 86400
+  issuer: 'arco-design-pro'
+# local configuration
+local:
+  path: 'uploads/file'
+# captcha configuration
+captcha:
+  key-long: 6
+  img-width: 240
+  img-height: 80
+# 限流
+rate-limit:
+  ip-verify: true
+  ip-limit-con: 10
+  ip-list-key: blackListKey
+  cap: 100
+  quantum: 100
+  # IP限制次数 一个小时15000次
+  iplimit-count: 15000
+  #  IP限制一个小时
+  iplimit-time: 3600
+# redis configuration
+redis:
+  db: 0
+  addr: '127.0.0.1:6379'
+  password: ''
+
+# qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
+qiniu-oss:
+  zone: 'ZoneHuaDong'
+  bucket: ''
+  img-path: ''
+  use-https: false
+  access-key: ''
+  secret-key: ''
+  use-cdn-domains: false
+
+# tencent cos configuration
+tencent-cos:
+  bucket: 'xxxxx-10005608'
+  region: 'ap-shanghai'
+  secret-id: 'xxxxxxxx'
+  secret-key: 'xxxxxxxx'
+  base-url: 'https://gin.vue.admin'
+  path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
+
+# aliyun oss configuration
+aliyun-oss:
+  endpoint: 'yourEndpoint'
+  access-key-id: 'yourAccessKeyId'
+  access-key-secret: 'yourAccessKeySecret'
+  bucket-name: 'yourBucketName'
+  bucket-url: 'yourBucketUrl'
+  base-path: 'yourBasePath'
