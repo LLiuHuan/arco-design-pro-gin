@@ -19,7 +19,7 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 		if jwtService.IsBlacklist(token) {
-			response.FailWithDetailed(gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
+			response.ResponseAll(10001, gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
 			c.Abort()
 			return
 		}

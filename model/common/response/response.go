@@ -9,11 +9,11 @@ import (
 type Response struct {
 	Code int         `json:"code"`
 	Data interface{} `json:"data"`
-	Msg  string      `json:"msg"`
+	Msg  string      `json:"message"`
 }
 
 const (
-	ERROR   = 7
+	ERROR   = -1
 	SUCCESS = 0
 )
 
@@ -26,7 +26,7 @@ func Result(code int, data interface{}, msg string, c *gin.Context) {
 	})
 }
 
-func ResponseAll(c *gin.Context, code int, data interface{}, message string) {
+func ResponseAll(code int, data interface{}, message string, c *gin.Context) {
 	Result(code, data, message, c)
 }
 

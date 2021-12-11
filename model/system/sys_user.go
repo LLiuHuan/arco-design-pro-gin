@@ -1,8 +1,8 @@
 package system
 
 import (
-	"github.com/google/uuid"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
+	uuid "github.com/satori/go.uuid"
 )
 
 type SysUser struct {
