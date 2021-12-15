@@ -1,8 +1,11 @@
 package utils
 
 import (
-	"errors"
 	"time"
+
+	"github.com/lliuhuan/arco-design-pro-gin/errno"
+
+	"github.com/pkg/errors"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
@@ -12,13 +15,6 @@ import (
 type JWT struct {
 	SigningKey []byte
 }
-
-var (
-	TokenExpired     = errors.New("token is expired")
-	TokenNotValidYet = errors.New("token not active yet")
-	TokenMalformed   = errors.New("that's not even a token")
-	TokenInvalid     = errors.New("couldn't handle this token: ")
-)
 
 func NewJWT() *JWT {
 	return &JWT{
@@ -62,14 +58,14 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, TokenMalformed
+				return nil, errors.Wrap(errno.TokenMalformed, "")
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
 				// Token is expired
-				return nil, TokenExpired
+				return nil, errors.Wrap(errno.TokenExpired, "")
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, TokenNotValidYet
+				return nil, errors.Wrap(errno.TokenNotValidYet, "")
 			} else {
-				return nil, TokenInvalid
+				return nil, errors.Wrap(errno.TokenInvalid, ve.Error())
 			}
 		}
 	}
@@ -77,11 +73,10 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
-		return nil, TokenInvalid
+		return nil, errors.Wrap(errno.TokenInvalid, "")
 
 	} else {
-		return nil, TokenInvalid
+		return nil, errors.Wrap(errno.TokenInvalid, "")
 
 	}
-
 }

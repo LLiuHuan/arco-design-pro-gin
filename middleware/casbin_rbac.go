@@ -9,7 +9,7 @@ import (
 
 var casbinService = service.ServiceGroupApp.System.CasbinService
 
-// 拦截器
+// CasbinHandler 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		waitUse, _ := utils.GetClaims(c)

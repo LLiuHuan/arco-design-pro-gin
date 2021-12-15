@@ -5,8 +5,6 @@
 package system
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
@@ -33,7 +31,6 @@ func (b *BaseApi) Login(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(l)
 	if store.Verify(l.CaptchaId, l.Captcha, true) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		if err, user := userService.Login(u); err != nil {
@@ -102,5 +99,34 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 			Token:     token,
 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, "登录成功", c)
+	}
+}
+
+// SetUserInfo 设置用户信息
+// @Tags SysUser
+// @Summary 设置用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysUser true "ID, 用户名, 昵称, 头像链接"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
+// @Router /user/setUserInfo [put]
+func (b *BaseApi) SetUserInfo(c *gin.Context) {
+	var user system.SysUser
+	if errStr, err := utils.BaseValidator(&user, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	claims, err := utils.GetClaims(c)
+	if err != nil {
+		response.FailWithMessage("获取用户信息失败", c)
+		return
+	}
+	user.ID = claims.ID
+	if err, _ := userService.SetUserInfo(user); err != nil {
+		global.AdpLog.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+	} else {
+		response.OkWithMessage("设置成功", c)
 	}
 }

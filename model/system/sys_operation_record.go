@@ -1,3 +1,8 @@
+// Package system
+// @program: arco-design-pro-gin
+// @author: [lliuhuan](https://github.com/lliuhuan)
+// @create: 2021-12-14 10:22
+// @desc: 记录接口请求信息
 package system
 
 import (

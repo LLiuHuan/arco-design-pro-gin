@@ -1,6 +1,18 @@
 package middleware
 
 import (
+	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/lliuhuan/arco-design-pro-gin/global"
+	"github.com/lliuhuan/arco-design-pro-gin/model/system"
+	"go.uber.org/zap"
+
+	"github.com/pkg/errors"
+
+	"github.com/lliuhuan/arco-design-pro-gin/errno"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lliuhuan/arco-design-pro-gin/model/common/response"
 	"github.com/lliuhuan/arco-design-pro-gin/service"
@@ -14,7 +26,7 @@ func JWTAuth() gin.HandlerFunc {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
 		token := c.Request.Header.Get("x-token")
 		if token == "" {
-			response.FailWithDetailed(gin.H{"reload": true}, "未登录或非法访问", c)
+			response.ResponseAll(http.StatusInternalServerError, gin.H{"reload": true}, "未登录或非法访问", c)
 			c.Abort()
 			return
 		}
@@ -27,12 +39,12 @@ func JWTAuth() gin.HandlerFunc {
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if err == utils.TokenExpired {
-				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
+			if errors.Cause(err) == errno.TokenExpired {
+				response.FailTokenWithMessage("授权已过期", c)
 				c.Abort()
 				return
 			}
-			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+			response.FailTokenWithMessage(err.Error(), c)
 			c.Abort()
 			return
 		}
@@ -43,23 +55,23 @@ func JWTAuth() gin.HandlerFunc {
 		//	c.Abort()
 		//}
 
-		//if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
-		//	claims.ExpiresAt = time.Now().Unix() + global.AdpConfig.JWT.ExpiresTime
-		//	newToken, _ := j.CreateTokenByOldToken(token, *claims)
-		//	newClaims, _ := j.ParseToken(newToken)
-		//	c.Header("new-token", newToken)
-		//	c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
-		//	if global.AdpConfig.System.UseMultipoint {
-		//		err, RedisJwtToken := jwtService.GetRedisJWT(newClaims.Username)
-		//		if err != nil {
-		//			global.GVA_LOG.Error("get redis jwt failed", zap.Error(err))
-		//		} else { // 当之前的取成功时才进行拉黑操作
-		//			_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
-		//		}
-		//		// 无论如何都要记录当前的活跃状态
-		//		_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
-		//	}
-		//}
+		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
+			claims.ExpiresAt = time.Now().Unix() + global.AdpConfig.JWT.ExpiresTime
+			newToken, _ := j.CreateTokenByOldToken(token, *claims)
+			newClaims, _ := j.ParseToken(newToken)
+			c.Header("new-token", newToken)
+			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
+			if global.AdpConfig.System.UseMultipoint {
+				err, RedisJwtToken := jwtService.GetRedisJWT(newClaims.Username)
+				if err != nil {
+					global.AdpLog.Error("get redis jwt failed", zap.Error(err))
+				} else { // 当之前的取成功时才进行拉黑操作
+					_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
+				}
+				// 无论如何都要记录当前的活跃状态
+				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
+			}
+		}
 		c.Set("claims", claims)
 		c.Next()
 	}

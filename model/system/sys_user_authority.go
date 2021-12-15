@@ -2,6 +2,7 @@
 // @program: arco-design-pro-gin
 // @author: [lliuhuan](https://github.com/lliuhuan)
 // @create: 2021-12-10 17:49
+// @desc: 用户角色关联表
 package system
 
 type SysUseAuthority struct {

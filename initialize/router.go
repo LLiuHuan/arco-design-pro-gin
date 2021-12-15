@@ -28,13 +28,15 @@ func Routers() *gin.Engine {
 	global.AdpLog.Info("use middleware logger")
 	// 跨域
 	Router.Use(middleware.Cors())
+	// 处理panic
+	Router.Use(middleware.GinRecovery(true))
+	// 记录所有请求接口
+	//Router.Use(middleware.OperationRecord())
 	global.AdpLog.Info("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.AdpLog.Info("register swagger handler")
 	// 超时处理
 	Router.Use(middleware.TimeoutMiddleware(time.Second * 60))
-	// 处理panic
-	Router.Use(middleware.GinRecovery(true))
 	// 处理日志
 	Router.Use(middleware.DefaultLogger())
 	// 限制ip 简单方式
@@ -81,10 +83,14 @@ func Routers() *gin.Engine {
 		}
 		{
 			systemRouter.InitBaseRouter(PublicGroup)
+			systemRouter.InitInitRouter(PublicGroup)
 		}
 		PrivateGroup := V1RouterGroup.Group("")
 		PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 		{
+			systemRouter.InitJwtRouter(PrivateGroup)
+			systemRouter.InitUserRouter(PrivateGroup)
+			systemRouter.InitMenuRouter(PrivateGroup)
 			systemRouter.InitCasbinRouter(PrivateGroup)
 		}
 	}

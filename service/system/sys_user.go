@@ -52,7 +52,7 @@ func (userService *UserService) Register(u system.SysUser) (err error, userInter
 }
 
 //ChangePassword 修改用户密码
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: ChangePassword
 //@description: 修改用户密码
 //@param: u *model.SysUser, newPassword string
@@ -65,7 +65,7 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 }
 
 //GetUserInfoList 分页查询用户数据
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: GetUserInfoList
 //@description: 分页获取数据
 //@param: info request.PageInfo
@@ -84,7 +84,7 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (err erro
 }
 
 //SetUserAuthority 设置一个用户的权限
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: SetUserAuthority
 //@description: 设置一个用户的权限
 //@param: uuid uuid.UUID, authorityId string
@@ -99,7 +99,7 @@ func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, author
 }
 
 //SetUserAuthorities 设置一个用户的权限
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: SetUserAuthorities
 //@description: 设置一个用户的权限
 //@param: id uint, authorityIds []string
@@ -130,7 +130,7 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 }
 
 //DeleteUser 删除用户
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: DeleteUser
 //@description: 删除用户
 //@param: id float64
@@ -146,7 +146,7 @@ func (userService *UserService) DeleteUser(id float64) (err error) {
 }
 
 //SetUserInfo 设置用户信息
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: SetUserInfo
 //@description: 设置用户信息
 //@param: reqUser model.SysUser
@@ -157,7 +157,7 @@ func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, 
 }
 
 //GetUserInfo 获取用户信息
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: GetUserInfo
 //@description: 获取用户信息
 //@param: uuid uuid.UUID
@@ -169,7 +169,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user sys
 }
 
 //FindUserById 通过id获取用户信息
-//@author: [SliverHorn](https://github.com/SliverHorn)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: FindUserById
 //@description: 通过id获取用户信息
 //@param: id int
@@ -181,7 +181,7 @@ func (userService *UserService) FindUserById(id int) (err error, user *system.Sy
 }
 
 //FindUserByUuid 通过uuid获取用户信息
-//@author: [SliverHorn](https://github.com/SliverHorn)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: FindUserByUuid
 //@description: 通过uuid获取用户信息
 //@param: uuid string
@@ -195,7 +195,7 @@ func (userService *UserService) FindUserByUuid(uuid string) (err error, user *sy
 }
 
 //ResetPassword 修改用户密码
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: resetPassword
 //@description: 修改用户密码
 //@param: ID uint

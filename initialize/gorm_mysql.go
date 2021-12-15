@@ -8,7 +8,7 @@ import (
 )
 
 // GormMysql 初始化Mysql数据库
-// Author [lliuhuan](https://github.com/lliuhuan)
+// @author: [lliuhuan](https://github.com/lliuhuan)
 func GormMysql() *gorm.DB {
 	m := global.AdpConfig.Mysql
 	if m.Dbname == "" {

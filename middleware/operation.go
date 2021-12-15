@@ -31,16 +31,21 @@ func OperationRecord() gin.HandlerFunc {
 				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 			}
 		}
-		claims, _ := utils.GetClaims(c)
-		if claims.ID != 0 {
-			userId = int(claims.ID)
+		claims, err := utils.GetClaims(c)
+		if err != nil {
+			userId = 9999999
 		} else {
-			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
-			if err != nil {
-				userId = 0
+			if claims.ID != 0 {
+				userId = int(claims.ID)
+			} else {
+				id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
+				if err != nil {
+					userId = 0
+				}
+				userId = id
 			}
-			userId = id
 		}
+
 		record := system.SysOperationRecord{
 			Ip:     c.ClientIP(),
 			Method: c.Request.Method,
@@ -62,7 +67,6 @@ func OperationRecord() gin.HandlerFunc {
 		now := time.Now()
 
 		c.Next()
-
 		latency := time.Since(now)
 		record.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
 		record.Status = c.Writer.Status()

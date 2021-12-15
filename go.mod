@@ -14,9 +14,10 @@ require (
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-redis/redis/v8 v8.11.4
-	github.com/google/uuid v1.1.2
+	github.com/gookit/color v1.5.0
 	github.com/juju/ratelimit v1.0.1
 	github.com/mojocn/base64Captcha v1.3.5
+	github.com/pkg/errors v0.9.1
 	github.com/qiniu/go-sdk/v7 v7.11.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v3.20.11+incompatible
@@ -82,6 +83,7 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/swaggo/swag v1.7.4 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
+	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect

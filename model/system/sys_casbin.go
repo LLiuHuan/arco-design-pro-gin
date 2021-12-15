@@ -1,3 +1,8 @@
+// Package system
+// @program: arco-design-pro-gin
+// @author: [lliuhuan](https://github.com/lliuhuan)
+// @create: 2021-12-10 17:59
+// @desc: casbin api鉴权表
 package system
 
 type CasbinModel struct {

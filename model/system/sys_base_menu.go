@@ -1,3 +1,8 @@
+// Package system
+// @program: arco-design-pro-gin
+// @author: [lliuhuan](https://github.com/lliuhuan)
+// @create: 2021-12-10 17:59
+// @desc: 菜单表
 package system
 
 import "github.com/lliuhuan/arco-design-pro-gin/global"
@@ -11,6 +16,7 @@ type SysBaseMenu struct {
 	Hidden        bool                              `json:"hidden" gorm:"comment:是否在列表隐藏"`     // 是否在列表隐藏
 	Component     string                            `json:"component" gorm:"comment:对应前端文件路径"` // 对应前端文件路径
 	Sort          int                               `json:"sort" gorm:"comment:排序标记"`          // 排序标记
+	Redirect      string                            `json:"redirect" gorm:"comment:重定向"`       // 重定向
 	Meta          `json:"meta" gorm:"comment:附加属性"` // 附加属性
 	SysAuthoritys []SysAuthority                    `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
 	Children      []SysBaseMenu                     `json:"children" gorm:"-"`

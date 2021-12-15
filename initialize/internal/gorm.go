@@ -16,7 +16,7 @@ var Gorm = new(_gorm)
 type _gorm struct{}
 
 // Config gorm 自定义配置
-// Author [lliuhuan](https://github.com/lliuhuan)
+// @author: [lliuhuan](https://github.com/lliuhuan)
 func (g *_gorm) Config() *gorm.Config {
 	config := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
 	_default := logger.New(NewWriter(log.New(os.Stdout, "\r\n", log.LstdFlags)), logger.Config{

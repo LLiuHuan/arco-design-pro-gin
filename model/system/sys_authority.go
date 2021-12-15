@@ -1,3 +1,8 @@
+// Package system
+// @program: arco-design-pro-gin
+// @author: [lliuhuan](https://github.com/lliuhuan)
+// @create: 2021-12-14 10:34
+// @desc: 角色表
 package system
 
 import "time"

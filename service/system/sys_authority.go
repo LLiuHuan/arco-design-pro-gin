@@ -22,7 +22,7 @@ type AuthorityService struct {
 var AuthorityServiceApp = new(AuthorityService)
 
 //findChildrenAuthority 查询子角色
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: findChildrenAuthority
 //@description: 查询子角色
 //@param: authority *model.SysAuthority
@@ -38,7 +38,7 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 }
 
 //CreateAuthority 创建一个角色
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: CreateAuthority
 //@description: 创建一个角色
 //@param: auth model.SysAuthority
@@ -52,12 +52,12 @@ func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthori
 	return err, auth
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
+//CopyAuthority 复制一个角色
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: CopyAuthority
 //@description: 复制一个角色
 //@param: copyInfo response.SysAuthorityCopyResponse
 //@return: err error, authority model.SysAuthority
-
 func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority system.SysAuthority) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.AdpDb.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
@@ -88,7 +88,7 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 }
 
 //UpdateAuthority 更改一个角色
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: UpdateAuthority
 //@description: 更改一个角色
 //@param: auth model.SysAuthority
@@ -99,7 +99,7 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 }
 
 //DeleteAuthority 删除角色
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: DeleteAuthority
 //@description: 删除角色
 //@param: auth *model.SysAuthority
@@ -134,7 +134,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 }
 
 //GetAuthorityInfoList 分页获取数据
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: GetAuthorityInfoList
 //@description: 分页获取数据
 //@param: info request.PageInfo
@@ -155,7 +155,7 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(info request.Page
 }
 
 //GetAuthorityInfo 获取所有角色信息
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: GetAuthorityInfo
 //@description: 获取所有角色信息
 //@param: auth model.SysAuthority
@@ -166,7 +166,7 @@ func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthor
 }
 
 //SetDataAuthority 设置角色资源权限
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: SetDataAuthority
 //@description: 设置角色资源权限
 //@param: auth model.SysAuthority
@@ -179,7 +179,7 @@ func (authorityService *AuthorityService) SetDataAuthority(auth system.SysAuthor
 }
 
 //SetMenuAuthority 菜单与角色绑定
-//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [lliuhuan](https://github.com/lliuhuan)
 //@function: SetMenuAuthority
 //@description: 菜单与角色绑定
 //@param: auth *model.SysAuthority

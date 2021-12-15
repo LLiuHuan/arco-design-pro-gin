@@ -10,9 +10,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/lliuhuan/arco-design-pro-gin/errno"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
-	"github.com/lliuhuan/arco-design-pro-gin/model/common/response"
 	"go.uber.org/zap"
 )
 
@@ -30,7 +31,7 @@ type LimitConfig struct {
 func (l LimitConfig) LimitWithTime() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := l.CheckOrMark(l.GenerationKey(c), l.Expire, l.Limit); err != nil {
-			c.JSON(http.StatusOK, gin.H{"code": response.ERROR, "msg": err})
+			c.JSON(http.StatusOK, gin.H{"code": errno.ERROR, "msg": err})
 			c.Abort()
 			return
 		} else {
