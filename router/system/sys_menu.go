@@ -12,12 +12,11 @@ import (
 type MenuRouter struct {
 }
 
-func (s *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
+func (s *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) {
 	//menuRouter := Router.Group("menu").Use(middleware.OperationRecord())
 	menuRouterWithoutRecord := Router.Group("menu")
 	var authorityMenuApi = v1.ApiV1GroupApp.System.AuthorityMenuApi
 	{
 		menuRouterWithoutRecord.POST("getMenu", authorityMenuApi.GetMenu) // 获取菜单树
 	}
-	return menuRouterWithoutRecord
 }

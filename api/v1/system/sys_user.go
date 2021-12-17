@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
+	"github.com/lliuhuan/arco-design-pro-gin/model/common/request"
 	"github.com/lliuhuan/arco-design-pro-gin/model/common/response"
 	"github.com/lliuhuan/arco-design-pro-gin/model/system"
 	systemReq "github.com/lliuhuan/arco-design-pro-gin/model/system/request"
@@ -128,5 +129,61 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		response.FailWithMessage("设置失败", c)
 	} else {
 		response.OkWithMessage("设置成功", c)
+	}
+}
+
+// GetUserList 分页获取用户列表
+// @Tags SysUser
+// @Summary 分页获取用户列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.PageInfo true "页码, 每页大小"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /user/getUserList [post]
+func (b *BaseApi) GetUserList(c *gin.Context) {
+	var pageInfo request.PageInfo
+	if errStr, err := utils.BaseValidatorQuery(&pageInfo, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	if err, list, total := userService.GetUserInfoList(pageInfo); err != nil {
+		global.AdpLog.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+// DeleteUser 删除用户
+// @Tags SysUser
+// @Summary 删除用户
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.GetById true "用户ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /user/deleteUser [delete]
+func (b *BaseApi) DeleteUser(c *gin.Context) {
+	var reqId request.GetById
+	if errStr, err := utils.BaseValidator(&reqId, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	jwtId := utils.GetUserID(c)
+	if jwtId == uint(reqId.ID) {
+		response.FailWithMessage("删除失败, 自杀失败", c)
+		return
+	}
+	if err := userService.DeleteUser(reqId.ID); err != nil {
+		global.AdpLog.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+	} else {
+		response.OkWithMessage("删除成功", c)
 	}
 }

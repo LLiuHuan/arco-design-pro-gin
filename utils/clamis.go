@@ -6,6 +6,7 @@ import (
 	systemReq "github.com/lliuhuan/arco-design-pro-gin/model/system/request"
 )
 
+// GetClaims 根据token获取claims信息
 func GetClaims(c *gin.Context) (*systemReq.CustomClaims, error) {
 	token := c.Request.Header.Get("x-token")
 	j := NewJWT()
@@ -28,4 +29,19 @@ func GetUserAuthorityId(c *gin.Context) string {
 		waitUse := claims.(*systemReq.CustomClaims)
 		return waitUse.AuthorityId
 	}
+}
+
+// GetUserID 从Gin的Context中获取从jwt解析出来的用户ID
+func GetUserID(c *gin.Context) uint {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetClaims(c); err != nil {
+			return 0
+		} else {
+			return cl.ID
+		}
+	} else {
+		waitUse := claims.(*systemReq.CustomClaims)
+		return waitUse.ID
+	}
+
 }
