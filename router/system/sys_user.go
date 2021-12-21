@@ -18,8 +18,11 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userRouterWithoutRecord := Router.Group("user")
 	var baseApi = v1.ApiV1GroupApp.System.BaseApi
 	{
-		userRouter.PUT("setUserInfo", baseApi.SetUserInfo)  // 设置用户信息
-		userRouter.DELETE("deleteUser", baseApi.DeleteUser) // 删除用户
+		userRouter.POST("register", baseApi.Register)                     // 用户注册账号
+		userRouter.PUT("setUserInfo", baseApi.SetUserInfo)                // 设置用户信息
+		userRouter.DELETE("deleteUser", baseApi.DeleteUser)               // 删除用户
+		userRouter.POST("setUserAuthority", baseApi.SetUserAuthority)     // 设置用户权限
+		userRouter.POST("setUserAuthorities", baseApi.SetUserAuthorities) // 设置用户权限组
 	}
 	{
 		userRouterWithoutRecord.GET("getUserList", baseApi.GetUserList)

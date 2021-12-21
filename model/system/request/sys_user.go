@@ -11,3 +11,24 @@ type Login struct {
 	Captcha   string `json:"captcha"`   // 验证码
 	CaptchaId string `json:"captchaId"` // 验证码ID
 }
+
+// SetUserAuth Modify  user's auth structure
+type SetUserAuth struct {
+	AuthorityId string `json:"authorityId"` // 角色ID
+}
+
+// SetUserAuthorities Modify  user's auth structure
+type SetUserAuthorities struct {
+	ID           uint
+	AuthorityIds []string `json:"authorityIds"` // 角色ID
+}
+
+// Register User register structure
+type Register struct {
+	Username     string   `json:"userName"`
+	Password     string   `json:"passWord"`
+	NickName     string   `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg    string   `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
+	AuthorityId  string   `json:"authorityId" gorm:"default:888"`
+	AuthorityIds []string `json:"authorityIds"`
+}

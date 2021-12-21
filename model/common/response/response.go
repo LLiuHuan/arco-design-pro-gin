@@ -23,7 +23,7 @@ func Result(code int, data interface{}, msg string, c *gin.Context) {
 	})
 }
 
-func ResponseAll(code int, data interface{}, message string, c *gin.Context) {
+func ResultAll(code int, data interface{}, message string, c *gin.Context) {
 	c.JSON(code, Response{
 		code,
 		data,

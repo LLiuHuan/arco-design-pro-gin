@@ -26,12 +26,12 @@ func JWTAuth() gin.HandlerFunc {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
 		token := c.Request.Header.Get("x-token")
 		if token == "" {
-			response.ResponseAll(http.StatusInternalServerError, gin.H{"reload": true}, "未登录或非法访问", c)
+			response.ResultAll(http.StatusInternalServerError, gin.H{"reload": true}, "未登录或非法访问", c)
 			c.Abort()
 			return
 		}
 		if jwtService.IsBlacklist(token) {
-			response.ResponseAll(10001, gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
+			response.ResultAll(10001, gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
 			c.Abort()
 			return
 		}

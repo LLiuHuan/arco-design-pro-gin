@@ -5,6 +5,8 @@
 package system
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
@@ -103,6 +105,36 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 	}
 }
 
+// Register 用户注册账号
+// @Tags SysUser
+// @Summary 用户注册账号
+// @Produce  application/json
+// @Param data body systemReq.Register true "用户名, 昵称, 密码, 角色ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
+// @Router /user/register [post]
+func (b *BaseApi) Register(c *gin.Context) {
+	var r systemReq.Register
+
+	if errStr, err := utils.BaseValidator(&r, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	var authorities []system.SysAuthority
+	for _, v := range r.AuthorityIds {
+		authorities = append(authorities, system.SysAuthority{
+			AuthorityId: v,
+		})
+	}
+	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities}
+	err, userReturn := userService.Register(*user)
+	if err != nil {
+		global.AdpLog.Error("注册失败!", zap.Error(err))
+		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
+	} else {
+		response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
+	}
+}
+
 // SetUserInfo 设置用户信息
 // @Tags SysUser
 // @Summary 设置用户信息
@@ -185,5 +217,61 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
+	}
+}
+
+// SetUserAuthority 更改用户权限
+// @Tags SysUser
+// @Summary 更改用户权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body systemReq.SetUserAuth true "用户UUID, 角色ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserAuthority [post]
+func (b *BaseApi) SetUserAuthority(c *gin.Context) {
+	var sua systemReq.SetUserAuth
+	if errStr, err := utils.BaseValidator(&sua, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	userID := utils.GetUserID(c)
+	uuid := utils.GetUserUuid(c)
+	if err := userService.SetUserAuthority(userID, uuid, sua.AuthorityId); err != nil {
+		global.AdpLog.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		claims := utils.GetUserInfo(c)
+		j := &utils.JWT{SigningKey: []byte(global.AdpConfig.JWT.SigningKey)} // 唯一签名
+		claims.AuthorityId = sua.AuthorityId
+		if token, err := j.CreateToken(*claims); err != nil {
+			global.AdpLog.Error("修改失败!", zap.Error(err))
+			response.FailWithMessage(err.Error(), c)
+		} else {
+			c.Header("new-token", token)
+			c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt, 10))
+			response.OkWithMessage("修改成功", c)
+		}
+
+	}
+}
+
+// SetUserAuthorities 设置用户权限
+// @Tags SysUser
+// @Summary 设置用户权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body systemReq.SetUserAuthorities true "用户UUID, 角色ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserAuthorities [post]
+func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
+	var sua systemReq.SetUserAuthorities
+	_ = c.ShouldBindJSON(&sua)
+	if err := userService.SetUserAuthorities(sua.ID, sua.AuthorityIds); err != nil {
+		global.AdpLog.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+	} else {
+		response.OkWithMessage("修改成功", c)
 	}
 }

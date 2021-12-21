@@ -40,7 +40,7 @@ func Routers() *gin.Engine {
 	// 处理日志
 	Router.Use(middleware.DefaultLogger())
 	// 限制ip 简单方式
-	Router.Use(middleware.IpVerifyMiddleware())
+	//Router.Use(middleware.IpVerifyMiddleware())
 	// 限制ip 复杂方式
 	//Router.Use(middleware.DefaultLimit())
 	// 反向代理
@@ -72,6 +72,8 @@ func Routers() *gin.Engine {
 
 	//获取路由组实例
 	systemRouter := router.RouterGroupApp.System
+	exampleRouter := router.RouterGroupApp.Example
+
 	V1RouterGroup := Router.Group("v1")
 	{
 		PublicGroup := V1RouterGroup.Group("")
@@ -93,6 +95,8 @@ func Routers() *gin.Engine {
 			systemRouter.InitMenuRouter(PrivateGroup)      // 注册menu路由
 			systemRouter.InitCasbinRouter(PrivateGroup)    // API权限相关路由
 			systemRouter.InitAuthorityRouter(PrivateGroup) // 注册角色路由
+
+			exampleRouter.InitFileRouter(PrivateGroup) // 文件上传下载功能路由
 		}
 	}
 

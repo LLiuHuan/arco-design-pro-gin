@@ -16,4 +16,5 @@ var jwtService = service.ServiceGroupApp.System.JwtService
 var casbinService = service.ServiceGroupApp.System.CasbinService
 var menuService = service.ServiceGroupApp.System.MenuService
 var initDBService = service.ServiceGroupApp.System.InitDBService
+var baseMenuService = service.ServiceGroupApp.System.BaseMenuService
 var authorityService = service.ServiceGroupApp.System.AuthorityService
