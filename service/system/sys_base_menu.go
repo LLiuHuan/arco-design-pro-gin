@@ -7,6 +7,7 @@ package system
 import (
 	"github.com/lliuhuan/arco-design-pro-gin/global"
 	"github.com/lliuhuan/arco-design-pro-gin/model/system"
+	"github.com/lliuhuan/arco-design-pro-gin/model/system/response"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -45,6 +46,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	upDateMap["title"] = menu.Title
 	upDateMap["icon"] = menu.Icon
 	upDateMap["sort"] = menu.Sort
+	upDateMap["redirect"] = menu.Redirect
 
 	err = global.AdpDb.Transaction(func(tx *gorm.DB) error {
 		db := tx.Where("id = ?", menu.ID).Find(&oldMenu)
@@ -78,4 +80,51 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 		return nil
 	})
 	return err
+}
+
+//DeleteBaseMenu 删除基础路由
+//@author: [lliuhuan](https://github.com/lliuhuan)
+//@function: DeleteBaseMenu
+//@description: 删除基础路由
+//@param: id float64
+//@return: err error
+func (baseMenuService *BaseMenuService) DeleteBaseMenu(id float64) (err error) {
+	err = global.AdpDb.Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
+	if err != nil {
+		var menu system.SysBaseMenu
+		db := global.AdpDb.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)
+		err = global.AdpDb.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
+		if err != nil {
+			return err
+		}
+		if len(menu.SysAuthoritys) > 0 {
+			err = global.AdpDb.Model(&menu).Association("SysAuthoritys").Delete(&menu.SysAuthoritys)
+		} else {
+			err = db.Error
+			if err != nil {
+				return
+			}
+		}
+	} else {
+		return errors.New("此菜单存在子菜单不可删除")
+	}
+	return err
+}
+
+//DeleteBaseMenus 删除基础路由
+//@author: [lliuhuan](https://github.com/lliuhuan)
+//@function: DeleteBaseMenu
+//@description: 删除基础路由
+//@param: id float64
+//@return: err error
+func (baseMenuService *BaseMenuService) DeleteBaseMenus(ids []float64) (res response.SysBaseMenuDelete) {
+	for _, id := range ids {
+		err := baseMenuService.DeleteBaseMenu(id)
+		if err != nil {
+			res.Error += 1
+		} else {
+			res.Success += 1
+		}
+	}
+	return res
 }

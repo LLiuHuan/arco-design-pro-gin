@@ -111,3 +111,70 @@ func (a *AuthorityMenuApi) UpdateBaseMenu(c *gin.Context) {
 		response.OkWithMessage("更新成功", c)
 	}
 }
+
+// AddBaseMenu 新增菜单
+// @Tags Menu
+// @Summary 新增菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysBaseMenu true "路由path, 父菜单ID, 路由name, 对应前端文件路径, 排序标记"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"添加成功"}"
+// @Router /menu/addBaseMenu [post]
+func (a *AuthorityMenuApi) AddBaseMenu(c *gin.Context) {
+	var menu system.SysBaseMenu
+	if errStr, err := utils.BaseValidator(&menu, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	if err := menuService.AddBaseMenu(menu); err != nil {
+		global.AdpLog.Error("添加失败!", zap.Error(err))
+
+		response.FailWithMessage("添加失败", c)
+	} else {
+		response.OkWithMessage("添加成功", c)
+	}
+}
+
+// DeleteBaseMenus 删除菜单
+// @Tags Menu
+// @Summary 删除菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.GetById true "菜单id"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /menu/deleteBaseMenu [post]
+func (a *AuthorityMenuApi) DeleteBaseMenus(c *gin.Context) {
+	var menus request.GetByIds
+	if errStr, err := utils.BaseValidator(&menus, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	res := baseMenuService.DeleteBaseMenus(menus.IDS)
+	response.OkWithData(res, c)
+}
+
+// DeleteBaseMenu 删除菜单
+// @Tags Menu
+// @Summary 删除菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.GetById true "菜单id"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /menu/deleteBaseMenu [post]
+func (a *AuthorityMenuApi) DeleteBaseMenu(c *gin.Context) {
+	var menu request.GetById
+	_ = c.ShouldBindJSON(&menu)
+	if errStr, err := utils.BaseValidator(&menu, c); err != nil {
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	if err := baseMenuService.DeleteBaseMenu(menu.ID); err != nil {
+		global.AdpLog.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}

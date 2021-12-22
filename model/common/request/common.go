@@ -15,6 +15,11 @@ type GetById struct {
 	ID float64 `json:"id" form:"id"` // 主键ID
 }
 
+// GetByIds Find by id structure
+type GetByIds struct {
+	IDS []float64 `json:"ids" form:"ids"` // 主键ID
+}
+
 func (r *GetById) Uint() uint {
 	return uint(r.ID)
 }

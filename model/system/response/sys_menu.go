@@ -22,3 +22,8 @@ type SysMenuTreeResponse struct {
 	ParentId string                `json:"parentId" gorm:"comment:父菜单ID"` // 父菜单ID
 	Children []SysMenuTreeResponse `json:"children" gorm:"-"`
 }
+
+type SysBaseMenuDelete struct {
+	Success int `json:"success"`
+	Error   int `json:"error"`
+}

@@ -18,7 +18,10 @@ func (s *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) {
 	menuRouterWithoutRecord := Router.Group("menu")
 	var authorityMenuApi = v1.ApiV1GroupApp.System.AuthorityMenuApi
 	{
-		menuRouter.POST("updateBaseMenu", authorityMenuApi.UpdateBaseMenu) // 更新菜单
+		menuRouter.POST("addBaseMenu", authorityMenuApi.AddBaseMenu)         // 新增菜单
+		menuRouter.POST("updateBaseMenu", authorityMenuApi.UpdateBaseMenu)   // 更新菜单
+		menuRouter.POST("deleteBaseMenu", authorityMenuApi.DeleteBaseMenu)   // 删除菜单
+		menuRouter.POST("deleteBaseMenus", authorityMenuApi.DeleteBaseMenus) // 删除菜单
 	}
 	{
 		menuRouterWithoutRecord.POST("getMenu", authorityMenuApi.GetMenu)                 // 获取菜单树

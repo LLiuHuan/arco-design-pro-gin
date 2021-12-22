@@ -5,8 +5,12 @@
 package utils
 
 import (
+	"os"
 	"runtime"
+	"runtime/pprof"
 	"time"
+
+	"github.com/shirou/gopsutil/process"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
@@ -52,6 +56,14 @@ type Disk struct {
 	TotalMB     int `json:"totalMb"`
 	TotalGB     int `json:"totalGb"`
 	UsedPercent int `json:"usedPercent"`
+}
+
+type Process struct {
+	CpuPercent     float64 `json:"cpuPercent"`
+	OneCpuPercent  float64 `json:"oneCpuPercent"`
+	ThreadCount    int     `json:"threadCount"`
+	GoroutineCount int     `json:"goroutineCount"`
+	Memory         float32 `json:"memory"`
 }
 
 //InitOS OS信息
@@ -119,4 +131,17 @@ func InitDisk() (d Disk, err error) {
 		d.UsedPercent = int(u.UsedPercent)
 	}
 	return d, nil
+}
+
+func InitProcess() (p Process, err error) {
+	if u, err := process.NewProcess(int32(os.Getpid())); err != nil {
+		return p, err
+	} else {
+		p.CpuPercent, _ = u.Percent(time.Second)
+		p.OneCpuPercent = p.CpuPercent / float64(runtime.NumCPU())
+		p.Memory, _ = u.MemoryPercent()
+		p.ThreadCount = pprof.Lookup("threadcreate").Count()
+		p.GoroutineCount = runtime.NumGoroutine()
+	}
+	return p, nil
 }

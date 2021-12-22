@@ -7,6 +7,9 @@ package system
 import (
 	"strconv"
 
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
+
 	"github.com/lliuhuan/arco-design-pro-gin/model/common/request"
 
 	"github.com/lliuhuan/arco-design-pro-gin/global"
@@ -146,4 +149,17 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 	//sql := "SELECT authority_menu.keep_alive,authority_menu.default_menu,authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? ORDER BY authority_menu.sort ASC"
 	//err = global.GVA_DB.Raw(sql, authorityId).Scan(&menus).Error
 	return err, menus
+}
+
+//AddBaseMenu 添加基础路由
+//@author: [lliuhuan](https://github.com/lliuhuan)
+//@function: AddBaseMenu
+//@description: 添加基础路由
+//@param: menu model.SysBaseMenu
+//@return: error
+func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
+	if !errors.Is(global.AdpDb.Where("name = ?", menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
+		return errors.New("存在重复name，请修改name")
+	}
+	return global.AdpDb.Create(&menu).Error
 }
