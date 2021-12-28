@@ -5,6 +5,7 @@
 package system
 
 import (
+	"github.com/lliuhuan/arco-design-pro-gin/errno"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
 	"github.com/lliuhuan/arco-design-pro-gin/model/system"
 	"github.com/lliuhuan/arco-design-pro-gin/model/system/response"
@@ -53,7 +54,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 		if oldMenu.Name != menu.Name {
 			if !errors.Is(tx.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 				global.AdpLog.Debug("存在相同name修改失败")
-				return errors.New("存在相同name修改失败")
+				return errno.MenuIdenticalName
 			}
 		}
 		txErr := tx.Unscoped().Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
@@ -106,7 +107,7 @@ func (baseMenuService *BaseMenuService) DeleteBaseMenu(id float64) (err error) {
 			}
 		}
 	} else {
-		return errors.New("此菜单存在子菜单不可删除")
+		return errno.MenuExistSubmenu
 	}
 	return err
 }

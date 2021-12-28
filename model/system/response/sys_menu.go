@@ -16,6 +16,10 @@ type SysBaseMenuResponse struct {
 	Menu system.SysBaseMenu `json:"menu"`
 }
 
+type SysBaseMenusResponse struct {
+	Menus []system.SysBaseMenu `json:"menus"`
+}
+
 type SysMenuTreeResponse struct {
 	ID       uint                  `json:"key" gorm:"primarykey"`         // 主键ID
 	Name     string                `json:"title" gorm:"comment:路由name"`   // 路由name

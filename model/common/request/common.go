@@ -12,7 +12,7 @@ type PageInfo struct {
 
 // GetById Find by id structure
 type GetById struct {
-	ID float64 `json:"id" form:"id"` // 主键ID
+	ID float64 `json:"id" form:"id" uri:"id"` // 主键ID
 }
 
 // GetByIds Find by id structure

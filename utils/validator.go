@@ -47,3 +47,17 @@ func BaseValidatorQuery(obj interface{}, c *gin.Context) (string, error) {
 	}
 	return "", nil
 }
+
+func BaseValidatorUri(obj interface{}, c *gin.Context) (string, error) {
+	if err := c.ShouldBindUri(obj); err != nil {
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			// 非validator.ValidationErrors类型错误直接返回
+			return err.Error(), err
+		}
+		// validator.ValidationErrors类型错误则进行翻译
+		errStr, _ := json.Marshal(removeTopStruct(errs.Translate(global.AdpValidator)))
+		return string(errStr), err
+	}
+	return "", nil
+}

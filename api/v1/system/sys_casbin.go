@@ -1,6 +1,8 @@
 package system
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
 	"github.com/lliuhuan/arco-design-pro-gin/model/common/response"
@@ -26,7 +28,7 @@ func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 	var cmr request.CasbinInReceive
 
 	if errStr, err := utils.BaseValidator(&cmr, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 
@@ -51,7 +53,7 @@ func (cas *CasbinApi) GetPolicyPathByAuthorityId(c *gin.Context) {
 	var casbin request.CasbinInReceive
 
 	if errStr, err := utils.BaseValidator(&casbin, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 

@@ -51,6 +51,14 @@ func Fail(c *gin.Context) {
 	Result(errno.ERROR, map[string]interface{}{}, "操作失败", c)
 }
 
+func FailCode(code int, c *gin.Context) {
+	Result(code, map[string]interface{}{}, "操作失败", c)
+}
+
+func FailCodeMessage(code int, message string, c *gin.Context) {
+	Result(code, map[string]interface{}{}, message, c)
+}
+
 func FailWithMessage(message string, c *gin.Context) {
 	Result(errno.ERROR, map[string]interface{}{}, message, c)
 }

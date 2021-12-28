@@ -13,9 +13,10 @@ func (s *CasbinRouter) InitCasbinRouter(Router *gin.RouterGroup) {
 	casbinRouterWithoutRecord := Router.Group("casbin")
 	var casbinApi = v1.ApiV1GroupApp.System.CasbinApi
 	{
-		casbinRouter.POST("updateCasbin", casbinApi.UpdateCasbin)
+		casbinRouter.PUT("", casbinApi.UpdateCasbin)
 	}
 	{
-		casbinRouterWithoutRecord.POST("getPolicyPathByAuthorityId", casbinApi.GetPolicyPathByAuthorityId)
+		// TODO: 这个用到的时候再修改
+		casbinRouterWithoutRecord.POST("list", casbinApi.GetPolicyPathByAuthorityId)
 	}
 }

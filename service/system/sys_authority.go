@@ -8,6 +8,8 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/lliuhuan/arco-design-pro-gin/errno"
+
 	"github.com/lliuhuan/arco-design-pro-gin/global"
 
 	"github.com/lliuhuan/arco-design-pro-gin/model/common/request"
@@ -46,7 +48,7 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthority) (err error, authority system.SysAuthority) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.AdpDb.Where("authority_id = ?", auth.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同角色id"), auth
+		return errno.AuthExist, auth
 	}
 	err = global.AdpDb.Create(&auth).Error
 	return err, auth
@@ -61,7 +63,7 @@ func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthori
 func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority system.SysAuthority) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.AdpDb.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同角色id"), authority
+		return errno.AuthExist, authority
 	}
 	copyInfo.Authority.Children = []system.SysAuthority{}
 	err, menus := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
@@ -106,10 +108,10 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 //@return: err error
 func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthority) (err error) {
 	if !errors.Is(global.AdpDb.Where("authority_id = ?", auth.AuthorityId).First(&system.SysUser{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("此角色有用户正在使用禁止删除")
+		return errno.AuthInUse
 	}
 	if !errors.Is(global.AdpDb.Where("parent_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("此角色存在子角色不允许删除")
+		return errno.AuthExistSubRole
 	}
 	db := global.AdpDb.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth)
 	err = db.Unscoped().Delete(auth).Error
@@ -148,6 +150,8 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(info request.Page
 	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
 	if len(authority) > 0 {
 		for k := range authority {
+			// TODO: 为了解决arco table必须有key的问题
+			authority[k].Key = authority[k].AuthorityId
 			err = authorityService.findChildrenAuthority(&authority[k])
 		}
 	}

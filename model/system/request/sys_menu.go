@@ -23,3 +23,9 @@ func DefaultMenu() []system.SysBaseMenu {
 		},
 	}}
 }
+
+// AddMenuAuthorityInfo Add menu authority info structure
+type AddMenuAuthorityInfo struct {
+	Menus       []system.SysBaseMenu `json:"menus"`
+	AuthorityId string               `json:"authorityId"` // 角色ID
+}

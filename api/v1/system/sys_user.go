@@ -5,6 +5,7 @@
 package system
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -25,12 +26,12 @@ import (
 // @Produce  application/json
 // @Param data body systemReq.Login true "用户名, 密码, 验证码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
-// @Router /base/login [post]
+// @Router /bases/login [post]
 func (b *BaseApi) Login(c *gin.Context) {
 	var l systemReq.Login
 
 	if errStr, err := utils.BaseValidator(&l, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 
@@ -111,12 +112,12 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 // @Produce  application/json
 // @Param data body systemReq.Register true "用户名, 昵称, 密码, 角色ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
-// @Router /user/register [post]
+// @Router /users/register [post]
 func (b *BaseApi) Register(c *gin.Context) {
 	var r systemReq.Register
 
 	if errStr, err := utils.BaseValidator(&r, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 	var authorities []system.SysAuthority
@@ -143,11 +144,11 @@ func (b *BaseApi) Register(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysUser true "ID, 用户名, 昵称, 头像链接"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
-// @Router /user/setUserInfo [put]
+// @Router /users [put]
 func (b *BaseApi) SetUserInfo(c *gin.Context) {
 	var user system.SysUser
 	if errStr, err := utils.BaseValidator(&user, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 	claims, err := utils.GetClaims(c)
@@ -172,11 +173,11 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.PageInfo true "页码, 每页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /user/getUserList [post]
+// @Router /users [get]
 func (b *BaseApi) GetUserList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	if errStr, err := utils.BaseValidatorQuery(&pageInfo, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 	if err, list, total := userService.GetUserInfoList(pageInfo); err != nil {
@@ -200,11 +201,11 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.GetById true "用户ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /user/deleteUser [delete]
+// @Router /users/:id [delete]
 func (b *BaseApi) DeleteUser(c *gin.Context) {
 	var reqId request.GetById
-	if errStr, err := utils.BaseValidator(&reqId, c); err != nil {
-		response.FailWithMessage(errStr, c)
+	if errStr, err := utils.BaseValidatorUri(&reqId, c); err != nil {
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 	jwtId := utils.GetUserID(c)
@@ -228,11 +229,11 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 // @Produce application/json
 // @Param data body systemReq.SetUserAuth true "用户UUID, 角色ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
-// @Router /user/setUserAuthority [post]
+// @Router /users/authority [post]
 func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	var sua systemReq.SetUserAuth
 	if errStr, err := utils.BaseValidator(&sua, c); err != nil {
-		response.FailWithMessage(errStr, c)
+		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
 	userID := utils.GetUserID(c)
@@ -264,7 +265,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 // @Produce application/json
 // @Param data body systemReq.SetUserAuthorities true "用户UUID, 角色ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
-// @Router /user/setUserAuthorities [post]
+// @Router /users/authorities [post]
 func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 	var sua systemReq.SetUserAuthorities
 	_ = c.ShouldBindJSON(&sua)

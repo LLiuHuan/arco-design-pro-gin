@@ -7,6 +7,8 @@ package system
 import (
 	"strconv"
 
+	"github.com/lliuhuan/arco-design-pro-gin/errno"
+
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
@@ -75,6 +77,7 @@ func (menuService *MenuService) getBaseMenuTreeMap() (err error, treeMap map[str
 	treeMap = make(map[string][]system.SysBaseMenu)
 	err = global.AdpDb.Order("sort").Preload("Parameters").Find(&allMenus).Error
 	for _, v := range allMenus {
+		v.Key = v.ID
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
 	return err, treeMap
@@ -159,7 +162,7 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 //@return: error
 func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
 	if !errors.Is(global.AdpDb.Where("name = ?", menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在重复name，请修改name")
+		return errno.MenuIdenticalName
 	}
 	return global.AdpDb.Create(&menu).Error
 }
