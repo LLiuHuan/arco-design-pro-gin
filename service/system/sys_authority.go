@@ -31,6 +31,8 @@ var AuthorityServiceApp = new(AuthorityService)
 //@return: err error
 func (authorityService *AuthorityService) findChildrenAuthority(authority *system.SysAuthority) (err error) {
 	err = global.AdpDb.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
+	// TODO: 为了解决arco table必须有key的问题
+	authority.Key = authority.AuthorityId
 	if len(authority.Children) > 0 {
 		for k := range authority.Children {
 			err = authorityService.findChildrenAuthority(&authority.Children[k])
@@ -150,8 +152,6 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(info request.Page
 	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
 	if len(authority) > 0 {
 		for k := range authority {
-			// TODO: 为了解决arco table必须有key的问题
-			authority[k].Key = authority[k].AuthorityId
 			err = authorityService.findChildrenAuthority(&authority[k])
 		}
 	}

@@ -32,7 +32,7 @@ type AuthorityApi struct {
 // @Produce application/json
 // @Param data body request.PageInfo true "页码, 每页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /authority/getAuthorityList [get]
+// @Router /authority [get]
 func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	if errStr, err := utils.BaseValidatorQuery(&pageInfo, c); err != nil {
@@ -60,7 +60,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysAuthority true "权限id, 权限名, 父角色id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /authority/createAuthority [post]
+// @Router /authority [post]
 func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 	var authority system.SysAuthority
 	if errStr, err := utils.BaseValidator(&authority, c); err != nil {
@@ -90,7 +90,7 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 // @Produce application/json
 // @Param data body response.SysAuthorityCopyResponse true "旧角色id, 新权限id, 新权限名, 新父角色id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"拷贝成功"}"
-// @Router /authority/copyAuthority [post]
+// @Router /authority/copy [post]
 func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 	var copyInfo systemRes.SysAuthorityCopyResponse
 	if errStr, err := utils.BaseValidator(&copyInfo, c); err != nil {
@@ -118,7 +118,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysAuthority true "删除角色"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /authority/deleteAuthority [post]
+// @Router /authority [delete]
 func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	var authority system.SysAuthority
 	if errStr, err := utils.BaseValidator(&authority, c); err != nil {
@@ -146,7 +146,7 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysAuthority true "权限id, 权限名, 父角色id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /authority/updateAuthority [post]
+// @Router /authority [put]
 func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 	var auth system.SysAuthority
 	if errStr, err := utils.BaseValidator(&auth, c); err != nil {

@@ -26,5 +26,6 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	}
 	{
 		userRouterWithoutRecord.GET("", baseApi.GetUserList)
+		userRouterWithoutRecord.GET("info", baseApi.GetUserInfo) // 获取自身信息
 	}
 }

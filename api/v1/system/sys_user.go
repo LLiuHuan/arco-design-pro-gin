@@ -276,3 +276,21 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 		response.OkWithMessage("修改成功", c)
 	}
 }
+
+// GetUserInfo 获取用户信息
+// @Tags SysUser
+// @Summary 获取用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /user/getUserInfo [get]
+func (b *BaseApi) GetUserInfo(c *gin.Context) {
+	uuid := utils.GetUserUuid(c)
+	if err, ReqUser := userService.GetUserInfo(uuid); err != nil {
+		global.AdpLog.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "获取成功", c)
+	}
+}
