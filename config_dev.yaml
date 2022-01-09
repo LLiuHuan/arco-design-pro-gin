@@ -15,7 +15,7 @@ jwt:
   buffer-time: 86400
   expires-time: 604800
   issuer: arco-design-pro
-  signing-key: ab86d95e-3818-4fd1-a4d7-470096f39c20
+  signing-key: 2195ba94-b1be-4653-9501-1a6fb0b0c410
 local:
   path: uploads/file
 mysql:
@@ -28,7 +28,7 @@ mysql:
   max-idle-conns: 0
   max-open-conns: 0
   log-mode: ""
-  log-zap: false
+  log-zap: true
 qiniu:
   zone: ""
   bucket: ""
@@ -76,7 +76,7 @@ zap:
   format: console
   prefix: '[github.com/lliuhuan/arco-design-pro-gin]'
   director: log
-  showLine: true
+  showLine: false
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
