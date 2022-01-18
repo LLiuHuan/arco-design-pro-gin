@@ -11,6 +11,7 @@ type ApiGroup struct {
 	AuthorityApi
 	SystemApiApi
 	AuthorityMenuApi
+	OperationRecordApi
 }
 
 var apiService = service.ServiceGroupApp.System.ApiService
@@ -22,3 +23,4 @@ var casbinService = service.ServiceGroupApp.System.CasbinService
 var initDBService = service.ServiceGroupApp.System.InitDBService
 var baseMenuService = service.ServiceGroupApp.System.BaseMenuService
 var authorityService = service.ServiceGroupApp.System.AuthorityService
+var operationRecordService = service.ServiceGroupApp.System.OperationRecordService

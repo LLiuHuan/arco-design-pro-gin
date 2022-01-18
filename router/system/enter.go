@@ -10,4 +10,5 @@ type RouterGroup struct {
 	InitRouter
 	CasbinRouter
 	AuthorityRouter
+	OperationRecordRouter
 }

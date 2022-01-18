@@ -1,4 +1,4 @@
-// Package router
+// Package system
 // @program: arco-design-pro-gin
 // @author: [lliuhuan](https://github.com/lliuhuan)
 // @create: 2022-01-09 21:18
