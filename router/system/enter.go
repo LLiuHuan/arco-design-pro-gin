@@ -1,6 +1,7 @@
 package system
 
 type RouterGroup struct {
+	ApiRouter
 	JwtRouter
 	SysRouter
 	BaseRouter
@@ -9,4 +10,5 @@ type RouterGroup struct {
 	InitRouter
 	CasbinRouter
 	AuthorityRouter
+	OperationRecordRouter
 }

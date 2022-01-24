@@ -23,7 +23,7 @@ type CasbinApi struct {
 // @Produce application/json
 // @Param data body request.CasbinInReceive true "权限id, 权限模型列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /casbin/UpdateCasbin [post]
+// @Router /v1/casbin [put]
 func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 	var cmr request.CasbinInReceive
 
@@ -48,11 +48,11 @@ func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.CasbinInReceive true "权限id, 权限模型列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /casbin/getPolicyPathByAuthorityId [post]
+// @Router /v1/casbin/:id [get]
 func (cas *CasbinApi) GetPolicyPathByAuthorityId(c *gin.Context) {
 	var casbin request.CasbinInReceive
 
-	if errStr, err := utils.BaseValidator(&casbin, c); err != nil {
+	if errStr, err := utils.BaseValidatorUri(&casbin, c); err != nil {
 		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
