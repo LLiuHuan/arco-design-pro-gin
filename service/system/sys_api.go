@@ -5,6 +5,8 @@
 package system
 
 import (
+	"fmt"
+
 	"github.com/lliuhuan/arco-design-pro-gin/global"
 	"github.com/lliuhuan/arco-design-pro-gin/model/common/request"
 	"github.com/lliuhuan/arco-design-pro-gin/model/system"
@@ -109,6 +111,9 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 //@return: err error, apis []model.SysApi
 func (apiService *ApiService) GetAllApis() (err error, apis []system.SysApi) {
 	err = global.AdpDb.Find(&apis).Error
+	for i, api := range apis {
+		apis[i].Key = fmt.Sprintf("p:%sm:%s", api.Path, api.Method)
+	}
 	return
 }
 

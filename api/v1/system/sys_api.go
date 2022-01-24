@@ -151,7 +151,7 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /api/all [get]
+// @Router /v1/api/all [get]
 func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 	if err, apis := apiService.GetAllApis(); err != nil {
 		global.AdpLog.Error("获取失败!", zap.Error(err))

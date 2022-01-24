@@ -5,6 +5,7 @@
 package system
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/lliuhuan/arco-design-pro-gin/errno"
@@ -77,7 +78,7 @@ func (menuService *MenuService) getBaseMenuTreeMap() (err error, treeMap map[str
 	treeMap = make(map[string][]system.SysBaseMenu)
 	err = global.AdpDb.Order("sort").Preload("Parameters").Find(&allMenus).Error
 	for _, v := range allMenus {
-		v.Key = v.ID
+		v.Key = fmt.Sprintf("%v", v.ID)
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
 	return err, treeMap
