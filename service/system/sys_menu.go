@@ -33,7 +33,7 @@ var MenuServiceApp = new(MenuService)
 func (menuService *MenuService) getMenuTreeMap(authorityId string) (err error, treeMap map[string][]system.SysMenu) {
 	var allMenus []system.SysMenu
 	treeMap = make(map[string][]system.SysMenu)
-	err = global.AdpDb.Where("authority_id = ?", authorityId).Order("sort").Preload("Parameters").Find(&allMenus).Error
+	err = global.AdpDb.Where("authority_id = ?", authorityId).Where("menu_type != 3").Order("sort").Find(&allMenus).Error
 	for _, v := range allMenus {
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
@@ -76,7 +76,7 @@ func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, tr
 func (menuService *MenuService) getBaseMenuTreeMap() (err error, treeMap map[string][]system.SysBaseMenu) {
 	var allMenus []system.SysBaseMenu
 	treeMap = make(map[string][]system.SysBaseMenu)
-	err = global.AdpDb.Order("sort").Preload("Parameters").Find(&allMenus).Error
+	err = global.AdpDb.Order("sort").Find(&allMenus).Error
 	for _, v := range allMenus {
 		v.Key = fmt.Sprintf("%v", v.ID)
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)

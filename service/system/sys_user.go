@@ -165,6 +165,15 @@ func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, 
 func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user system.SysUser) {
 	var reqUser system.SysUser
 	err = global.AdpDb.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
+	var menu MenuService
+	err1, menus := menu.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: reqUser.AuthorityId})
+	if err1 == nil {
+		for _, sysMenu := range menus {
+			if sysMenu.Meta.Permissions != "" {
+				reqUser.Permissions = append(reqUser.Permissions, sysMenu.Meta.Permissions)
+			}
+		}
+	}
 	return err, reqUser
 }
 

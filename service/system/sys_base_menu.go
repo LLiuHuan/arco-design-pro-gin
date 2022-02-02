@@ -23,7 +23,7 @@ type BaseMenuService struct {
 //@param: id float64
 //@return: err error, menu model.SysBaseMenu
 func (baseMenuService *BaseMenuService) GetBaseMenuById(id float64) (err error, menu system.SysBaseMenu) {
-	err = global.AdpDb.Preload("Parameters").Where("id = ?", id).First(&menu).Error
+	err = global.AdpDb.Where("id = ?", id).First(&menu).Error
 	return
 }
 
@@ -62,16 +62,6 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 			global.AdpLog.Debug(txErr.Error())
 			return txErr
 		}
-		if len(menu.Parameters) > 0 {
-			for k := range menu.Parameters {
-				menu.Parameters[k].SysBaseMenuID = menu.ID
-			}
-			txErr = tx.Create(&menu.Parameters).Error
-			if txErr != nil {
-				global.AdpLog.Debug(txErr.Error())
-				return txErr
-			}
-		}
 
 		txErr = db.Updates(upDateMap).Error
 		if txErr != nil {
@@ -90,7 +80,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 //@param: id float64
 //@return: err error
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id float64) (err error) {
-	err = global.AdpDb.Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
+	err = global.AdpDb.Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
 	if err != nil {
 		var menu system.SysBaseMenu
 		db := global.AdpDb.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)
