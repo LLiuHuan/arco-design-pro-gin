@@ -48,6 +48,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	upDateMap["icon"] = menu.Icon
 	upDateMap["sort"] = menu.Sort
 	upDateMap["redirect"] = menu.Redirect
+	upDateMap["permissions"] = menu.Permissions
 
 	err = global.AdpDb.Transaction(func(tx *gorm.DB) error {
 		db := tx.Where("id = ?", menu.ID).Find(&oldMenu)

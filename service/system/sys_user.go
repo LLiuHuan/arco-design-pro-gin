@@ -169,7 +169,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user sys
 	err1, menus := menu.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: reqUser.AuthorityId})
 	if err1 == nil {
 		for _, sysMenu := range menus {
-			if sysMenu.Meta.Permissions != "" {
+			if sysMenu.MenuType == 3 && sysMenu.Meta.Permissions != "" {
 				reqUser.Permissions = append(reqUser.Permissions, sysMenu.Meta.Permissions)
 			}
 		}

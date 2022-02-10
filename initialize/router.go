@@ -40,7 +40,7 @@ func Routers() *gin.Engine {
 	// 处理日志
 	Router.Use(middleware.DefaultLogger())
 	// 限制ip 简单方式
-	//Router.Use(middleware.IpVerifyMiddleware())
+	Router.Use(middleware.IpVerifyMiddleware())
 	// 限制ip 复杂方式
 	//Router.Use(middleware.DefaultLimit())
 	// 反向代理

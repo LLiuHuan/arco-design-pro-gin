@@ -7,8 +7,6 @@ package system
 import (
 	"fmt"
 
-	"github.com/lliuhuan/arco-design-pro-gin/source/example"
-
 	"github.com/lliuhuan/arco-design-pro-gin/source/system"
 
 	model "github.com/lliuhuan/arco-design-pro-gin/model/system"
@@ -84,12 +82,12 @@ func (initDBService *InitDBService) initMysqlData() error {
 		system.Casbin,
 		system.BaseMenu,
 		system.Authority,
-		system.Dictionary,
+		//system.Dictionary,
 		system.UserAuthority,
 		system.DataAuthorities,
 		system.AuthoritiesMenus,
-		system.DictionaryDetail,
+		//system.DictionaryDetail,
 		system.ViewAuthorityMenuMysql,
-		example.FileMysql,
+		//example.FileMysql,
 	)
 }

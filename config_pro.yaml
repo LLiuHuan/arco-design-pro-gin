@@ -1,0 +1,82 @@
+aliyun-oss:
+  endpoint: yourEndpoint
+  access-key-id: yourAccessKeyId
+  access-key-secret: yourAccessKeySecret
+  bucket-name: yourBucketName
+  bucket-url: yourBucketUrl
+  base-path: yourBasePath
+captcha:
+  key-long: 6
+  img-width: 240
+  img-height: 80
+casbin:
+  model-path: ./rbac_model.conf
+jwt:
+  buffer-time: 86400
+  expires-time: 604800
+  issuer: arco-design-pro
+  signing-key: 2195ba94-b1be-4653-9501-1a6fb0b0c410
+local:
+  path: uploads/file
+mysql:
+  path: 127.0.0.1
+  port: "3306"
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name:
+  username:
+  password:
+  max-idle-conns: 0
+  max-open-conns: 0
+  log-mode: ""
+  log-zap: true
+qiniu:
+  zone: ""
+  bucket: ""
+  img-path: ""
+  use-https: false
+  access-key: ""
+  secret-key: ""
+  use-cdn-domains: false
+qiniu-oss:
+  access-key: ""
+  bucket: ""
+  img-path: ""
+  secret-key: ""
+  use-cdn-domains: false
+  use-https: false
+  zone: ZoneHuaDong
+rate-limit:
+  ip-verify: true
+  ip-limit-con: 10
+  ip-list-key: blackListKey
+  cap: 100
+  quantum: 100
+  iplimit-count: 15000
+  iplimit-time: 3600
+redis:
+  db: 0
+  addr: 127.0.0.1:6379
+  password: ""
+system:
+  name: FairManServer
+  version: v0.0.1
+  port: "8080"
+  db-type: mysql
+  oss-type: local
+  use-multipoint: true
+tencent-cos:
+  bucket: xxxxx-10005608
+  region: ap-shanghai
+  secret-id: xxxxxxxx
+  secret-key: xxxxxxxx
+  base-url: https://gin.vue.admin
+  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+zap:
+  level: info
+  format: console
+  prefix: '[github.com/lliuhuan/arco-design-pro-gin]'
+  director: log
+  showLine: false
+  encode-level: LowercaseColorLevelEncoder
+  stacktrace-key: stacktrace
+  log-in-console: true

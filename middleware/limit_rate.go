@@ -37,7 +37,6 @@ func IpVerifyMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//visitorIP := ctx.Request.Header.Get("X-real-ip")
 		visitorIP := c.ClientIP()
-		fmt.Println("IP:        ", visitorIP)
 		// 判断是否在黑名单
 		timeOrigin := global.AdpRedis.HGet(context.TODO(), global.AdpConfig.RateLimit.IpListKey, visitorIP).Val()
 		err := blackListVerify(timeOrigin, visitorIP, global.AdpRedis, blacklist[visitorIP])

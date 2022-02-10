@@ -10,8 +10,8 @@ import (
 )
 
 func init() {
-	//gin.SetMode(gin.ReleaseMode)
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.DebugMode)
 }
 
 //go:generate go env -w GO111MODULE=on

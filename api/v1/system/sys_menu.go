@@ -5,7 +5,6 @@
 package system
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/lliuhuan/arco-design-pro-gin/errno"
@@ -61,7 +60,6 @@ func (a *AuthorityMenuApi) GetBaseMenuById(c *gin.Context) {
 		response.FailCodeMessage(http.StatusBadRequest, errStr, c)
 		return
 	}
-	fmt.Println("idInfo", idInfo)
 	if err, menu := baseMenuService.GetBaseMenuById(idInfo.ID); err != nil {
 		global.AdpLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
