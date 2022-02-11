@@ -33,6 +33,8 @@ func (v *viewAuthorityMenuMysql) Initialize() error {
 		   @menus.sort              AS sort,
 		   @menus.title             AS title,
 		   @menus.hidden            AS hidden,
+		   @menus.permissions       AS permissions,
+		   @menus.menu_type         AS menu_type,
 		   @menus.component         AS component,
 		   @menus.parent_id         AS parent_id,
 		   @menus.created_at        AS created_at,

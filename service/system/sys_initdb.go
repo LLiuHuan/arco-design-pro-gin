@@ -10,8 +10,6 @@ import (
 
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/lliuhuan/arco-design-pro-gin/global"
-	"github.com/lliuhuan/arco-design-pro-gin/model/example"
-
 	"github.com/lliuhuan/arco-design-pro-gin/model/system/request"
 
 	"github.com/lliuhuan/arco-design-pro-gin/model/system"
@@ -39,17 +37,17 @@ func (initDBService *InitDBService) initTables() error {
 		system.SysBaseMenu{},
 		system.SysAuthority{},
 		system.JwtBlacklist{},
-		system.SysDictionary{},
+		//system.SysDictionary{},
 		system.SysOperationRecord{},
-		system.SysDictionaryDetail{},
-		system.SysBaseMenuParameter{},
+		//system.SysDictionaryDetail{},
+		//system.SysBaseMenuParameter{},
 
 		adapter.CasbinRule{},
 
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
+		//example.ExaFile{},
+		//example.ExaCustomer{},
+		//example.ExaFileChunk{},
+		//example.ExaFileUploadAndDownload{},
 	)
 
 }
